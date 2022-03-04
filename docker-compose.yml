@@ -19,6 +19,7 @@ services:
     image: nextcloud:fpm
     restart: always
     volumes:
+      - ./web/config.php:/var/www/html/config/config.php
       - nextcloud:/var/www/html
     environment:
       - POSTGRES_HOST=db
@@ -38,15 +39,35 @@ services:
 
   web:
     image: nginx
+    networks:
+      default:
+        aliases:
+          - younup.mynextcloud.com
     restart: always
     ports:
-      - 8080:80
+      - 443:443
+      - 9980:9980
     volumes:
       - ./web/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./web/cert.pem:/etc/ssl/cert.pem:ro
+      - ./web/key.pem:/etc/ssl/key.pem:ro
+      - ./web/config.php:/var/www/html/config/config.php
       - nextcloud:/var/www/html
     depends_on:
       - db
       - app
+
+  online:
+    image: collabora/code
+    privileged: true
+    volumes:
+      - ./online/coolwsd.xml:/etc/coolwsd/coolwsd.xml
+    environment:
+      domain: online
+      username: admin
+      password: admin
+    restart:
+      unless-stopped
 
 volumes:
   db:
