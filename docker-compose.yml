@@ -7,35 +7,25 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB_FILE=/run/secrets/postgres_db
-      - POSTGRES_USER_FILE=/run/secrets/postgres_user
-      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
-    secrets:
-      - postgres_db
-      - postgres_password
-      - postgres_user
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=nextcloud
 
   app:
     image: nextcloud:fpm
     restart: always
     volumes:
-      - ./web/config.php:/var/www/html/config/config.php
       - nextcloud:/var/www/html
     environment:
       - POSTGRES_HOST=db
-      - POSTGRES_DB_FILE=/run/secrets/postgres_db
-      - POSTGRES_USER_FILE=/run/secrets/postgres_user
-      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
-      - NEXTCLOUD_ADMIN_PASSWORD_FILE=/run/secrets/nextcloud_admin_password
-      - NEXTCLOUD_ADMIN_USER_FILE=/run/secrets/nextcloud_admin_user
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=nextcloud
+      - NEXTCLOUD_ADMIN_PASSWORD=admin
+      - NEXTCLOUD_ADMIN_USER=admin
+      - NEXTCLOUD_TRUSTED_DOMAINS=younup.mynextcloud.com
     depends_on:
       - db
-    secrets:
-      - nextcloud_admin_password
-      - nextcloud_admin_user
-      - postgres_db
-      - postgres_password
-      - postgres_user
 
   web:
     image: nginx
@@ -51,7 +41,6 @@ services:
       - ./web/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./web/cert.pem:/etc/ssl/cert.pem:ro
       - ./web/key.pem:/etc/ssl/key.pem:ro
-      - ./web/config.php:/var/www/html/config/config.php
       - nextcloud:/var/www/html
     depends_on:
       - db
@@ -63,7 +52,7 @@ services:
     volumes:
       - ./online/coolwsd.xml:/etc/coolwsd/coolwsd.xml
     environment:
-      domain: online
+      domain: younup.mynextcloud.com
       username: admin
       password: admin
     restart:
@@ -72,15 +61,3 @@ services:
 volumes:
   db:
   nextcloud:
-
-secrets:
-  nextcloud_admin_password:
-    file: ./secrets/nextcloud_admin_password.txt
-  nextcloud_admin_user:
-    file: ./secrets/nextcloud_admin_user.txt
-  postgres_db:
-    file: ./secrets/postgres_db.txt
-  postgres_password:
-    file: ./secrets/postgres_password.txt
-  postgres_user:
-    file: ./secrets/postgres_user.txt
