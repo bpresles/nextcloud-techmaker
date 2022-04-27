@@ -1,12 +1,12 @@
 # Configuration
 
-Définition des paramètres de base de données et du compte admin dans le répertoire `secrets` :
+Définition des paramètres de base de données et du compte admin dans le fichier `docker-compose.yml` :
 
-* nexcloud_admin_user => Nom d'utilisateur pour l'administrateur
-* nexcloud_admin_password => Mode de passe pour l'administrateur
-* postgres_db => Nom de la base de données
-* postgres_user => Nom d'utilisateur pour la base de données
-* postgres_pass => Mot de passe de l'utilisateur pour la base de données
+* NEXTCLOUD_ADMIN_USER => Nom d'utilisateur pour l'administrateur
+* NEXTCLOUD_ADMIN_PASSWORD => Mode de passe pour l'administrateur
+* POSTGRES_DB => Nom de la base de données
+* POSTGRES_USER => Nom d'utilisateur pour la base de données
+* POSTGRES_PASSWORD => Mot de passe de l'utilisateur pour la base de données
 
 ## Modification de votre fichier hosts:
 
