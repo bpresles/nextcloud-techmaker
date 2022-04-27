@@ -52,7 +52,7 @@ services:
     volumes:
       - ./online/coolwsd.xml:/etc/coolwsd/coolwsd.xml
     environment:
-      domain: younup.mynextcloud.com
+      aliasgroup1: https://younup.mynextcloud.com
       username: admin
       password: admin
     restart:
